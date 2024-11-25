@@ -1,5 +1,6 @@
 <?php
 
+use Controllers\Errors;
 use Controllers\Login;
 
 class App 
@@ -15,11 +16,20 @@ class App
             $login->render();
         }
         $fileController = "controllers/$url[0].php";
-        //echo $fileController;
         if(file_exists($fileController)) {
             $nameController = "Controllers\\".ucfirst($url[0]);
             //echo $nameController;
             $controller = new $nameController;
+
+            if(isset($url[1])) {
+                if(method_exists($controller, $url[1])) {
+
+                } else {
+                    new Errors();
+                }
+            } else {
+                $controller->render();
+            }
         } else {
             echo "No existe archivo";
         }
@@ -30,5 +40,5 @@ class App
 /*
 * 0 => controller
 * 1 => method
-* 2 => parameters
+* 2 => parameters
 */
